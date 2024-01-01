@@ -4,33 +4,46 @@ import Card from "./Card";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import ThemeProvider from 'react-bootstrap/ThemeProvider'
 
-function CardsContainer({ image, name, species, status, gender }) {
+function CardsContainer() {
   const [characters, setCharacters] = useState([]);
 
   useEffect(() => {
-    fetch("https://rickandmortyapi.com/api/character")
-      .then((res) => res.json())
-      .then((data) => setCharacters(data.results));
+    async function getCharacters() {
+      try {
+        const response = await fetch("https://rickandmortyapi.com/api/character")
+        const data = await response.json()
+        setCharacters(data.results)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getCharacters();
   }, []);
 
   return (
-    <Container>
-      <Row>
-        {characters.map((character) => (
-          <Col>
-            <Card
-              id={character.id}
-              image={character.image}
-              name={character.name}
-              species={character.species}
-              status={character.status}
-              gender={character.gender}
-            />
-          </Col>
-        ))}
-      </Row>
-    </Container>
+    <ThemeProvider
+      breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}
+      minBreakpoint="xxs"
+    >
+      <Container style={{ marginTop: '20px' }}>
+        <Row>
+          {characters.map((character) => (
+            <Col key={character.id}>
+              <Card
+                id={character.id}
+                image={character.image}
+                name={character.name}
+                species={character.species}
+                status={character.status}
+                gender={character.gender}
+              />
+            </Col>
+          ))}
+        </Row>
+      </Container>
+    </ThemeProvider>
   );
 }
 
