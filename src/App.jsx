@@ -12,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<CardsContainer />} />
         <Route path="/details/:id" element={<Details />} />
+        <Route path="/status/:byStatus" element={<CardsContainer />} />
         <Route path="/*" element={<h1>NOT FOUND</h1>} />
       </Routes>
     </BrowserRouter>

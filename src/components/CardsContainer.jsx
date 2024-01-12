@@ -1,35 +1,30 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Card from "./Card";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import ThemeProvider from 'react-bootstrap/ThemeProvider'
+import ThemeProvider from "react-bootstrap/ThemeProvider";
+import useCharacter from "../hooks/useCharacter";
+import { useParams } from "react-router-dom";
 
 function CardsContainer() {
-  const [characters, setCharacters] = useState([]);
+  const { info, getAllCharacters, getCharactersFiltered } = useCharacter();
+
+  const { byStatus } = useParams();
 
   useEffect(() => {
-    async function getCharacters() {
-      try {
-        const response = await fetch("https://rickandmortyapi.com/api/character")
-        const data = await response.json()
-        setCharacters(data.results)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    getCharacters();
-  }, []);
+    byStatus ? getCharactersFiltered(byStatus) : getAllCharacters();
+  }, [byStatus]);
 
   return (
     <ThemeProvider
-      breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}
+      breakpoints={["xxxl", "xxl", "xl", "lg", "md", "sm", "xs", "xxs"]}
       minBreakpoint="xxs"
     >
-      <Container style={{ marginTop: '20px' }}>
+      <Container style={{ marginTop: "20px" }}>
         <Row>
-          {characters.map((character) => (
+          {info.map((character) => (
             <Col key={character.id}>
               <Card
                 id={character.id}

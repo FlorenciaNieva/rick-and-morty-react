@@ -1,28 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import CircleLoader from "react-spinners/ClipLoader";
 import { Card, Row, Col } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import useCharacter from "../hooks/useCharacter";
 
 export default function Details() {
-  const [character, setCharacter] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const params = useParams();
   const navigate = useNavigate();
+  const { id } = useParams();
+  const { info, loading, getOneCharacter } = useCharacter();
 
   useEffect(() => {
-    async function getCharacter() {
-      const response = await fetch(
-        `https://rickandmortyapi.com/api/character/${params.id}`
-      );
-      const data = await response.json();
-      setTimeout(() => {
-        setCharacter(data);
-        setLoading(false);
-      }, 1000);
-    }
-    getCharacter();
-  }, []);
+    getOneCharacter(id);
+  }, [id]);
 
   return (
     <>
@@ -40,7 +30,7 @@ export default function Details() {
       ) : (
         <>
           <Card
-            key={character.id}
+            key={info.id}
             style={{
               width: "50vw",
               margin: "auto",
@@ -51,9 +41,9 @@ export default function Details() {
             <Card.Body>
               <Row>
                 <Col className="d-flex align-items-center justify-content-center">
-                  <Card.Img src={character.image} />
+                  <Card.Img src={info.image} />
                 </Col>
-                <Col md={7} >
+                <Col md={7}>
                   <Card.Title
                     style={{
                       fontFamily: "shlop",
@@ -61,7 +51,7 @@ export default function Details() {
                       color: "green",
                     }}
                   >
-                    Name: {character?.name}
+                    Name: {info.name}
                   </Card.Title>
                   <h5
                     style={{
@@ -69,7 +59,7 @@ export default function Details() {
                       fontSize: "30px",
                     }}
                   >
-                    Status: {character?.status}
+                    Status: {info.status}
                   </h5>
                   <h5
                     style={{
@@ -77,7 +67,7 @@ export default function Details() {
                       fontSize: "30px",
                     }}
                   >
-                    Gender: {character?.gender}
+                    Gender: {info.gender}
                   </h5>
                   <h5
                     style={{
@@ -85,7 +75,7 @@ export default function Details() {
                       fontSize: "30px",
                     }}
                   >
-                    Origin: {character.origin?.name}
+                    Origin: {info.origin.name}
                   </h5>
                   <h5
                     style={{
@@ -93,7 +83,7 @@ export default function Details() {
                       fontSize: "30px",
                     }}
                   >
-                    Location: {character.location?.name}
+                    Location: {info.location.name}
                   </h5>
                   <Button
                     onClick={() => navigate("/")}
