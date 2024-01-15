@@ -1,13 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import CircleLoader from "react-spinners/ClipLoader";
 import { Card, Row, Col } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import useCharacter from "../hooks/useCharacter";
+import { FaRegStar, FaStar } from "react-icons/fa";
+import { FavoritesContext } from "../context/favoritesContext";
 
 export default function Details() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { isFavorite, addFavorite, removeFavorite } = useContext(FavoritesContext);
   const { info, loading, getOneCharacter } = useCharacter();
 
   useEffect(() => {
@@ -44,6 +47,32 @@ export default function Details() {
                   <Card.Img src={info.image} />
                 </Col>
                 <Col md={7}>
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: -5,
+                      left: 650,
+                      fontSize: "25px",
+                      color: "green",
+                    }}
+                  >
+                    {isFavorite(info.id) ? (
+                      <FaStar onClick={() => removeFavorite(info.id)} />
+                    ) : (
+                      <FaRegStar
+                        onClick={() =>
+                          addFavorite({
+                            id: info.id,
+                            name: info.name,
+                            image: info.image,
+                            species: info.species,
+                            status: info.status,
+                            gender: info.gender,
+                          })
+                        }
+                      />
+                    )}
+                  </div>
                   <Card.Title
                     style={{
                       fontFamily: "shlop",

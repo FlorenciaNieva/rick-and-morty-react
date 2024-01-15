@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import ListGroup from "react-bootstrap/ListGroup";
+import Dropdown from 'react-bootstrap/Dropdown';
+import NavItem from 'react-bootstrap/NavItem';
+import Nav from 'react-bootstrap/NavLink';
 
 export default function Header() {
   return (
@@ -13,6 +15,7 @@ export default function Header() {
           width: "100%",
           backgroundSize: "cover",
           backgroundPosition: "center",
+          position: "relative"
         }}
       >
         <h1
@@ -21,21 +24,25 @@ export default function Header() {
             fontSize: "500%",
             color: "green",
             textAlign: "center",
-            textShadow:
-              "1px 1px 0 white, -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white",
+            textShadow: "1px 1px 0 white, -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white",
           }}
         >Rick and Morty</h1>
-        <ListGroup horizontal className="d-flex justify-content-center">
-          <ListGroup.Item>
-            <Link to="/status/dead">Dead</Link>
-          </ListGroup.Item>
-          <ListGroup.Item>
-            <Link to="/status/alive">Alive</Link>
-          </ListGroup.Item>
-          <ListGroup.Item>
-            <Link to="/status/unknown">Unknown</Link>
-          </ListGroup.Item>
-        </ListGroup>
+        <div style={{
+          position: "absolute",
+          top: 25,
+          right: 30,
+        }}>
+          <Dropdown as={NavItem}>
+            <Dropdown.Toggle as={Nav.Link}>Filter for…</Dropdown.Toggle>
+            <Dropdown.Menu>
+            <Dropdown.Item><Link to="/">Alls</Link></Dropdown.Item>
+              <Dropdown.Item><Link to="/status/dead">Dead</Link></Dropdown.Item>
+              <Dropdown.Item><Link to="/status/alive">Alive</Link></Dropdown.Item>
+              <Dropdown.Item><Link to="/status/unknown">Unknown</Link></Dropdown.Item>
+            </Dropdown.Menu>
+            <Link to="/favorites" style={{ marginLeft: "15px" }}>Go to favorites</Link>
+          </Dropdown>
+        </div>
       </header>
     </>
   );
